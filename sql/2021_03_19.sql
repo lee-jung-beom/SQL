@@ -149,3 +149,4 @@ AND emp.sal > 2500
 AND emp.empno > 7600 
 AND dname = 'RESEARCH';
 
+SELECT * FROM emp;
