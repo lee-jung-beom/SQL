@@ -13,6 +13,20 @@ cycle, product 테이블을 이용하여 고객이 애응하는 제품 명칭을
 SELECT p.*, 1, c.cid, c.day, c.cnt
 FROM product p LEFT OUTER JOIN cycle c ON(p.pid = c.pid AND cid = 1); 
 
+과제)
+SELECT p.*, 1, c.cid, c.day, c.cnt
+FROM product p 
+LEFT OUTER JOIN cycle c ON(p.pid = c.pid AND cid = 1);
+
+SELECT p.*, c.cid, c.day, c.cnt 
+FROM product p, cycle c, customer ct
+
+
+
+SELECT * FROM product 
+SELECT * FROM cycle;
+SELECT * FROM customer;
+
 SELECT p.*, :cid, NVL(c.day, 0) day, NVL(c.cnt, 0) cnt
 FROM product p cycle c
 WHERE p.pid = c.pid(+)
