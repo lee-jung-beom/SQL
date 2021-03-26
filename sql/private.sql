@@ -92,5 +92,6 @@ COUNT(DECODE(deptno, 10, 1)) CNT1,
 COUNT(DECODE(deptno, 30, 1)) CNT2
 FROM emp;
 
+SELECT * FROM emp;
 
 
