@@ -95,3 +95,27 @@ FROM emp;
 SELECT * FROM emp;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
