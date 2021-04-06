@@ -98,12 +98,46 @@ SELECT 회원번호, 회원명, 구매금액합
           WHERE AND A.CART_PROD = C.PROD_ID
           GROUP BY A.CART_MEMBER
           ORDER BY 2 DESC) D, MEMBER B
+WHERE D.MID=B.MEM_ID
+AND ROWNUM = 1;
+
+
+CREATE OR REPLACE VIEW cart_v
+SELECT 회원번호, 회원명, 구매금액합
+    FROM (SELECT A.CART_MEMBER AS MID, 
+                 SUM(C.PROD_PRICE*A.CART_QTY) AS AMT 
+          FROM CART A, PROD C
+          WHERE AND A.CART_PROD = C.PROD_ID
+          GROUP BY A.CART_MEMBER
+          ORDER BY 2 DESC) D, MEMBER B
+WHERE D.MID=B.MEM_ID
+AND ROWNUM = 1;
+
+(익명블록)
+
+DECLARE 
+    V_MID V_MAXAMT.회원번호%TYPE;
+    V_NAME V_MAXAMT.회원명%TYPE;
+    V_ANT V_MAXAMT.구매금액합%TYPE;
+    V_RES VARCHAR2(100);
+BEGIN 
+    SELECT 회원번호, 회원명, 구매금액합 INTO V_MID, V_NAME, V_AMT
+        FROM V_MAXAMT;
         
-GROUP BY A.CART_MEMBER, B.MEM_NAME
-ORDER BY 3 DESC;
+V_RES:=V_MID||', '||V_NAME||', '||TO_CHAR(V_AMT,'99,999,999');
 
-  
-SELECT *
-FROM member;
+DBMS_OUTPUT.PUT_LINE(V_RES);
+END;
 
-
+(상수사용예)
+키보드로 수 하나를 입력 받아 그 값을 반지름으로하는 원의 넓이를 구하시오
+ACCEPT P_NUM PROMPT '원의 반지름 : '
+DECLARE 
+ V_RADIUS NUMBER := TO_NUMBER('&P_NUM');
+ V_PI CONSTANT NUMBER := 3.1415926;
+ V_RES NUMBER := 0;
+BEGIN 
+ V_RES := V_RADIUS*V_RADIUS* V_PI;
+ DBMS_OUTPUT.PUT_LINE('원의 너비 = ' ||V_RES);
+END;
+    
