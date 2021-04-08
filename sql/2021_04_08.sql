@@ -1,0 +1,67 @@
+문제1 년도를 입력 받아 해당년도에 구매를 가장 많이한 회원이름과 구매액을 반환하는 프로시져를 작성하시오.
+    1. 프로시져명: PROC_MEM_PTOP
+    2. 매개변수 : 입력용 : 년도
+                 출력용 : 회원명, 구매액
+
+CREATE OR REPLACE PROCEDURE PROC_MEM_PTOP(
+    V_DATE IN PROD.PROD_INSDATE%TYPE,
+    V_NAME OUT PROD.PROD_NAME%TYPE,
+    V_COST OUT PROD.PROD_COST%TYPE)
+ AS 
+ BEGIN
+   SELECT PROD_NAME, PROD_COST
+     INTO V_NAME, V_COST
+     FROM PROD
+    WHERE PROD_INSDATE = V_DATE;
+ END;
+ 
+--(실행)
+ACCEPT PDATE PROMPT '연도 : '
+DECLARE
+    ONAME PROD.PROD_NAME%TYPE;
+    OCOST PROD.PROD_COST%TYPE;
+BEGIN
+    PROC_MEM_PTOP(LOWER('&PDATE'), ONAME, OCOST);
+    DBMS_OUTPUT.PUT_LINE('연도 : '|| '&PDATE');
+    DBMS_OUTPUT.PUT_LINE('회원명 : '|| ONAME);
+    DBMS_OUTPUT.PUT_LINE('구매액 : '|| OCOST);
+END;
+
+
+**2005년도 회원별 구매금액
+CREATE OR REPLACE PROCEDURE PROC_MEM_PTOP(
+    P_YEAR IN CHAR,
+    P_NAME OUT MEMBER.MEM_NAME%TYPE,
+    P_AMT OUT NUMBER)
+AS
+BEGIN
+  SELECT M.MEM_NAME, A.AMT INTO P_NAME, P_AMT
+   FROM (SELECT C.CART_MEMBER AS MID,
+               SUM(C.CART_QTY*P.PROD_PRICE) AS AMT
+          FROM CART C, PROD P
+         WHERE C.CART_PROD = P.PROD_ID
+           AND SUBSTR(C.CART_NO, 1, 4) = P_YEAR
+         GROUP BY C.CART_MEMBER
+         ORDER BY 2 DESC) A, MEMBER M
+   WHERE M.MEM_ID = A.MID    
+     AND ROWNUM=1;
+END;
+
+ (실행)
+DECLARE 
+  V_NAME MEMBER.MEM_NAME%TYPE;
+  V_AMT NUMBER := 0;
+BEGIN
+  PROC_MEM_PTOP('2005', V_NAME, V_AMT);
+  
+  DBMS_OUTPUT.PUT_LINE('회원명 : ' || V_NAME);
+  DBMS_OUTPUT.PUT_LINE('구매금액 : ' || TO_CHAR(V_AMT, '99,999,999'));
+END;
+
+
+문제2) 2005년도 구매금액이 없는 회원을 찾아 회원테이블(MEMBER)의 삭제여부
+     컬럼(MEM_DELETE)의 값을 'Y'로 변경하는 프로시져를 작성하시오.
+답>
+
+
+
