@@ -62,6 +62,54 @@ END;
 문제2) 2005년도 구매금액이 없는 회원을 찾아 회원테이블(MEMBER)의 삭제여부
      컬럼(MEM_DELETE)의 값을 'Y'로 변경하는 프로시져를 작성하시오.
 답>
+(프로시져 생성 : 입력 받은 회원번호로 해당 회원의 삭제여부 컬럼값을 변경)
+CREATE OR REPLACE PROCEDURE PROC_MEM_UPDATE(
+    P_MID IN MEMBER.MEM_ID%TYPE)
+AS
+BEGIN 
+  UPDATE MEMBER
+    SET MEM_DELETE='Y'
+   WHERE MEM_ID=P_MID;
+  COMMIT;
+END;
+
+(구매금액이 없는 회원)
+DECLARE 
+  CURSOR CUR_MID
+  IS 
+    SELECT MEM_ID
+       FROM MEMBER
+      WHERE MEM_ID NOT IN(SELECT CART_MEMBER
+                             FROM CART
+                            WHERE CART_NO LIKE '2005%');
+BEGIN 
+  FOR REC_MID IS CUR_MID LOOP
+      PROC_MEM_UPDATE(REC_MID.MEM_ID);
+  END LOOP;
+END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
