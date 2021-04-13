@@ -1,0 +1,3 @@
+SELECT A.NAME, A.AGE
+    FROM TB1 A INNER JOIN TB2 B
+                  ON A.NAME = B.NAME;
